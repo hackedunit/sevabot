@@ -177,22 +177,22 @@ class GitHubPullRequest(SendMessage):
         
         if payload.get("action"):
 		if payload["action"] == "opened":
-            		msg = u"New pull request from %s: %s %s\n" % (payload["pull_request"]["user"]["login"], payload["pull_request"]["title"], payload["pull_request"]["html_url"])
+            		msg = u"New pull request from %s: %s %s\n" % (payload["sender"]["login"], payload["pull_request"]["title"], payload["pull_request"]["html_url"])
 		elif payload["action"] == "closed":
 			if payload["pull_request"]["merged_by"]:
 				msg = u"Pull request merged by %s: %s %s\n" % (payload["pull_request"]["merged_by"]["login"], payload["pull_request"]["title"], payload["pull_request"]["html_url"])
 			else:
-				msg = u"Pull request closed without merging by %s: %s %s\n" % (payload["pull_request"]["user"]["login"], payload["pull_request"]["title"], payload["pull_request"]["html_url"])
+				msg = u"Pull request closed without merging by %s: %s %s\n" % (payload["sender"]["login"], payload["pull_request"]["title"], payload["pull_request"]["html_url"])
         	elif payload["action"] == "reopened":
-			msg = u"Pull request reopened by %s: %s %s\n" % (payload["pull_request"]["user"]["login"], payload["pull_request"]["title"], payload["pull_request"]["html_url"])
+			msg = u"Pull request reopened by %s: %s %s\n" % (payload["sender"]["login"], payload["pull_request"]["title"], payload["pull_request"]["html_url"])
 		elif payload["action"] == "created" and payload["issue"]:
-			msg = u"%s left a comment on %s" % (payload["issue"]["user"]["login"], payload["issue"]["html_url"])
+			msg = u"%s left a comment on %s" % (payload["sender"]["login"], payload["issue"]["html_url"])
 		elif payload["action"] == "synchronize":
-			msg = u"%s pushed to %s" % (payload["pull_request"]["user"]["login"], payload["pull_request"]["html_url"])
+			msg = u"%s pushed to %s" % (payload["sender"]["login"], payload["pull_request"]["html_url"])
 		else:
             		msg = u""
 	elif payload.get("comment"):
-		msg = u"%s left a comment on %s" % (payload["comment"]["user"]["login"], payload["comment"]["html_url"])
+		msg = u"%s left a comment on %s" % (payload["sender"]["login"], payload["comment"]["html_url"])
 	else:
 		msg = u""
         return msg
